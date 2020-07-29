@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { RegisterComponent } from '../register/register.component';
+import { FormBuilder, Validators } from '@angular/forms';
 
 
 @Component({
@@ -10,9 +11,13 @@ import { RegisterComponent } from '../register/register.component';
 })
 export class LoginComponent implements OnInit {
 
-  closeResult: string;
+  loginForm = this.form.group({
+    email: ['', Validators.required],
+    password: ['', Validators.required]
+  });
+  submitted = false;
 
-  constructor(public modal: NgbActiveModal, private modalService: NgbModal) { }
+  constructor(public modal: NgbActiveModal, private modalService: NgbModal, private form: FormBuilder) { }
 
   ngOnInit() {
   }
@@ -20,6 +25,18 @@ export class LoginComponent implements OnInit {
   modalRegister() {
     this.modalService.dismissAll(LoginComponent);
     this.modalService.open(RegisterComponent);
+  }
+
+  login() {
+    this.submitted = true;
+    console.log(this.loginForm);
+    if (this.loginForm.valid) {
+      this.modalService.dismissAll(LoginComponent);
+    }
+  }
+
+  get myForm() {
+    return this.loginForm.controls;
   }
 
 }
